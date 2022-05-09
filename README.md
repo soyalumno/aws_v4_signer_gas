@@ -1,47 +1,114 @@
 # AWS_V4_SIGNER
 
-GAS + TypeScript + Clasp + webpackによる開発環境サンプル
+## スクリプトID
 
-## 使い方
+以下のIDをGASのライブラリに追加
 
-GASのプロジェクトIDを`.clasp.json`に記入
+`1ujoWwBfuTunHojxGbF4gZkaP4FmKC-RB3oI5c9KqUPUUUO5Bb2P8UEs_` as `aws_v4_signer`
 
-```json
-{
-  "scriptId":"<scriptId>",
-  "rootDir": "dist"
+## sample
+
+```javascript
+// エンドポイント
+const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
+
+// リフレッシュトークンの生成
+function getToken() {
+  const params = {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    payload: JSON.stringify({
+      grant_type: 'refresh_token',
+      refresh_token: '<REFRESH_TOKEN>',
+      client_id: '<CLIENT_ID>',
+      client_secret: '<CLIENT_SECRET>',
+    }),
+  };
+  const resp = UrlFetchApp.fetch('https://api.amazon.com/auth/o2/token', params);
+  const token = JSON.parse(resp.getContentText()).access_token;
+  return token;
+}
+
+// GETリクエストのサンプル
+function sample_get() {
+  // create token
+  const token = getToken();
+
+  // create signer
+  const url = SPAPI_EP + '/sellers/v1/marketplaceParticipations';
+  const options = {
+    region: 'us-west-2',
+    service: 'execute-api',
+    method: 'GET',
+    url,
+
+    key: '<SECRET_ACCESS_KEY>',
+    key_id: '<ACCESS_KEY_ID>'
+  };
+  const signer = aws_v4_signer.create(options);
+  signer.sign();
+
+  // API request
+  const params = {
+    method: 'get',
+    headers: {
+      'x-amz-date': signer.x_amz_date,
+      Authorization: signer.authHeader,
+      'x-amz-access-token': token,
+    },
+    payload: {}, // getリクエストでもpayloadを渡すこと
+  };
+  const resp = UrlFetchApp.fetch(url, params);
+  const {data} = JSON.parse(resp.getContentText());
+  console.log(data);
+}
+
+// POSTリクエストのサンプル
+function sample_post() {
+  // create token
+  const token = getToken();
+
+  // request body
+  const url = SPAPI_EP + '/products/fees/v0/items/B07WXL5YPW/feesEstimate';
+  const payload = {
+    FeesEstimateRequest: {
+      MarketplaceId: 'A1VC38T7YXB528',
+      PriceToEstimateFees: {
+        ListingPrice: { CurrencyCode:'JPY', Amount: 980 }
+      },
+      Identifier: 'testId'
+    }
+  };
+  const options = {
+    region: 'us-west-2',
+    service: 'execute-api',
+    method: 'POST',
+    url,
+    payload,
+
+    key: '<SECRET_ACCESS_KEY>',
+    key_id: '<ACCESS_KEY_ID>'
+  };
+
+  // create signer
+  const signer = aws_v4_signer.create(options);
+  signer.sign();
+
+  // API request
+  const params = {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json', // UrlFetchAppにはJSON形式で渡すこと
+      host: signer.hostname,
+      'x-amz-date': signer.x_amz_date,
+      Authorization: signer.authHeader,
+      'x-amz-access-token': token,
+    },
+    payload: JSON.stringify(payload), // UrlFetchAppにはJSON形式で渡すこと
+  };
+  const resp = UrlFetchApp.fetch(url, params);
+  const data = JSON.parse(resp.getContentText());
+  console.log(data);
 }
 ```
-
-npmのライブラリをインストール
-
-```bash
-$ npm i
-```
-
-tscを起動
-
-```bash
-$ tsc -w
-```
-
-以下のエラーが出る場合
-`node_modules/@types/google-apps-script/google-apps-script.base.d.ts`のconsole定義をコメントアウトすること
-
-> node_modules/@types/google-apps-script/google-apps-script.base.d.ts:512:13 - error TS2403: Subsequent variable declarations must have the same type.  Variable 'console' must be of type 'Console', but here has type 'console'.
-> 
-> 512 declare var console: GoogleAppsScript.Base.console;
->                 ~~~~~~~
-> 
->   ../../../../.nodenv/versions/16.5.0/lib/node_modules/typescript/lib/lib.dom.d.ts:17792:13
->     17792 declare var console: Console;
->                       ~~~~~~~
->     'console' was also declared here.
-
-claspを起動
-
-```bash
-$ clasp --watch
-```
-
 

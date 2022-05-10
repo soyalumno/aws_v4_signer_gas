@@ -8,7 +8,7 @@ GASからSP-APIを実行するための[署名](https://docs.aws.amazon.com/ja_j
 
 `1ujoWwBfuTunHojxGbF4gZkaP4FmKC-RB3oI5c9KqUPUUUO5Bb2P8UEs_` as `aws_v4_signer`
 
-![](https://gyazo.com/84424ee3bd081c9b830c14f6f1ba2925)
+![](https://i.gyazo.com/84424ee3bd081c9b830c14f6f1ba2925.png)
 
 ## Example
 

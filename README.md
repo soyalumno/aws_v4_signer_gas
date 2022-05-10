@@ -1,4 +1,4 @@
-# AWS_V4_SIGNER
+# AWS_V4_SIGNER_GAS
 
 GASからSP-APIを実行するための[署名](https://docs.aws.amazon.com/ja_jp/general/latest/gr/signature-version-4.html)を作成します
 

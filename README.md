@@ -8,10 +8,10 @@
 
 ## sample
 
-```javascript
-// エンドポイント
-const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
 
+トークンの生成
+
+```javascript
 // リフレッシュトークンの生成
 function getToken() {
   const params = {
@@ -28,6 +28,13 @@ function getToken() {
   const token = JSON.parse(resp.getContentText()).access_token;
   return token;
 }
+```
+
+GETリクエストのサンプル
+
+```javascript
+// エンドポイント
+const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
 
 // GETリクエストのサンプル
 function sample_get() {
@@ -59,9 +66,16 @@ function sample_get() {
     payload: {}, // getリクエストでもpayloadを渡すこと
   };
   const resp = UrlFetchApp.fetch(url, params);
-  const {data} = JSON.parse(resp.getContentText());
+  const data = JSON.parse(resp.getContentText());
   console.log(data);
 }
+```
+
+POSTリクエストのサンプル
+
+```javascript
+// エンドポイント
+const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
 
 // POSTリクエストのサンプル
 function sample_post() {
@@ -99,7 +113,6 @@ function sample_post() {
     method: 'post',
     headers: {
       'Content-Type': 'application/json', // UrlFetchAppにはJSON形式で渡すこと
-      host: signer.hostname,
       'x-amz-date': signer.x_amz_date,
       Authorization: signer.authHeader,
       'x-amz-access-token': token,

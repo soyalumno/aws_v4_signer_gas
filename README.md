@@ -36,10 +36,8 @@ function getToken() {
 ### GETリクエスト
 
 ```javascript
-// エンドポイント
 const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
 
-// GETリクエストのサンプル
 function sample_get() {
   // create token
   const token = getToken();
@@ -77,10 +75,8 @@ function sample_get() {
 ### POSTリクエスト
 
 ```javascript
-// エンドポイント
 const SPAPI_EP = 'https://sellingpartnerapi-fe.amazon.com';
 
-// POSTリクエストのサンプル
 function sample_post() {
   // create token
   const token = getToken();

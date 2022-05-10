@@ -1,15 +1,18 @@
 # AWS_V4_SIGNER
 
-## スクリプトID
+GASからSP-APIを実行するための[署名](https://docs.aws.amazon.com/ja_jp/general/latest/gr/signature-version-4.html)を作成します
 
-以下のIDをGASのライブラリに追加
+## Usage
+
+以下のスクリプトIDをGASのライブラリに追加してください
 
 `1ujoWwBfuTunHojxGbF4gZkaP4FmKC-RB3oI5c9KqUPUUUO5Bb2P8UEs_` as `aws_v4_signer`
 
-## sample
+![](https://gyazo.com/84424ee3bd081c9b830c14f6f1ba2925)
 
+## Example
 
-トークンの生成
+### トークンの生成
 
 ```javascript
 // リフレッシュトークンの生成
@@ -30,7 +33,7 @@ function getToken() {
 }
 ```
 
-GETリクエストのサンプル
+### GETリクエスト
 
 ```javascript
 // エンドポイント
@@ -71,7 +74,7 @@ function sample_get() {
 }
 ```
 
-POSTリクエストのサンプル
+### POSTリクエスト
 
 ```javascript
 // エンドポイント
